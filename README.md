@@ -1,9 +1,9 @@
 # HalftonePAL
 Halftone with Points And Lines
 
-Copyright (C) 2020 by Esteban Hufstedler: www.EstebanHufstedler.com . Thanks to [StippleGen](https://wiki.evilmadscientist.com/StippleGen) for the inspiration, and [Lee Byron](https://leebyron.com/mesh/) for the mesh library.
+Copyright (C) 2020 by [Esteban Hufstedler](www.EstebanHufstedler.com ). Thanks to [StippleGen](https://wiki.evilmadscientist.com/StippleGen) for the inspiration, and [Lee Byron](https://leebyron.com/mesh/) for the mesh library.
 
-This arranges points on an imageto halftone it, using the circles themselves, dots at their centers, or lines connecting the circles.
+This arranges points on an image for halftoning, using the circles themselves, dots at their centers, or lines connecting the circles.
 
 # Features:
 - Choose how to arrange the circles: 
@@ -30,7 +30,7 @@ The bottom portion is the control panel, with four columns. In the left column, 
 
 ## LOAD/SAVE
 - "LOAD IMAGE": Pick a new image from your computer, It works with BMP, GIF, PNG,  JPG, JPEG, TIF, TIFF files.
-- "SAVE TXT": Saves the currently pattern to a text file as tab-separated numbers, in the path order. This may be useful if you want to use the points in some other code. When it saves a sequence of dots or circles, each row is (x-position ,y-position, radius). When it saves line segments, they are (x1, y1, x2, y2). It also saves a PNG with the same base filename.
+- "SAVE TXT": Saves the current pattern to a text file as tab-separated numbers, in the path order. This may be useful if you want to use the points in some other code. When it saves a sequence of dots or circles, each row is (x-position, y-position, radius). When it saves line segments, they are (x1, y1, x2, y2). It also saves a PNG with the same base filename.
 - "SAVE SVG": Saves an SVG file of the current pattern. It also saves a PNG with the same base filename.
 The names of the saved files are based on the current time and date, so you shouldn't have to worry above over-writing your previous results.
 - "SAVE IMAGE": It saves a PNG of the current view.
