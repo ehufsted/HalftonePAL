@@ -117,3 +117,6 @@ That's much better. Now I'll save it as an SVG, ready to plot elsewhere.
 - Voronoi: Draw the Voronoi diagram
 - Delaunay: Draw a Delaunay triangulation
 - Nearest pts: For each point, draw lines to the nearest 3 others.
+
+# To use the source code
+You'll need to install [Processing](https://processing.org/) first. Once you have that, install the controlP5 library through the Processing GUI. Next, download the mesh library from [Lee Byron](https://leebyron.com/mesh/), and unzip that into "../Processing Sketches/libraries/". Then it should work!
