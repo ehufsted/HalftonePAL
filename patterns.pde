@@ -304,7 +304,7 @@ PolyLine reorderPolyLine(PolyLine pl){
 // if that helps, make that the new order.
 float[][] reorderCircleData(float[][] data){
   // data is [i][x,y,r,i0];
-  int nIter = 10000;
+  int nIter = nIterationsOptimizationSwap;
   int iA0,iB0,temp,iA1,iB1;
   float d1,d2;
   float xtemp,ytemp,rtemp,itemp;

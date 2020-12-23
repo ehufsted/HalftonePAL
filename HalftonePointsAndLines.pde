@@ -50,6 +50,7 @@ int pointsChoice = 0;
 int patternChoice = 1;
 
 // Parameters that aren't immediately controllable.
+int nIterationsOptimizationSwap = 20000;
 String imageFilename = "rhino.jpg";
 // initial base filename for outputs.
 String outputFilenameBase = "rhinoCSP";
