@@ -20,7 +20,7 @@ This arranges points on an image for halftoning, using the circles themselves, d
 
 
 # Interface
-<img src="https://i.imgur.com/G2L2ldB.png" alt="Screenshot on opening" width="500">
+<img src="https://i.imgur.com/u2JVnC2.png" alt="Screenshot on opening" width="500">
 
 
 The top portion of the program shows the current result. When it starts, it automatically loads the rhino.jpg image, calculates a quick circle packing, and draws the circles on a white background. 
