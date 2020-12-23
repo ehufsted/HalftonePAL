@@ -55,6 +55,6 @@ void savePicture(String filenameBase){
   float sc = drawingScale;
   float x0 = drawingX0;
   float y0 = drawingY0;
-  PImage imageOutput = get(ceil(x0),ceil(y0),floor(nx*sc),floor(ny*sc));
+  PImage imageOutput = get(ceil(x0)+1,ceil(y0)+1,floor(nx*sc)-1,floor(ny*sc)-1);
   imageOutput.save(filenameBase+".png");
 }
