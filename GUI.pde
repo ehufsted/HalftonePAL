@@ -58,6 +58,14 @@ void setupGUI() {
     .setCaptionLabel("Save SVG")
     .setBroadcast(true)
     ;
+  cp5.addButton("saveImage")
+    .setBroadcast(false)
+    .setValue(0)
+    .setPosition(xLoadSave, y0+120)
+    .setSize(100, 20)
+    .setCaptionLabel("Save Image")
+    .setBroadcast(true)
+    ;
   
 
   // RE-RUNS IF CHANGED
@@ -349,6 +357,10 @@ void saveAsTXT(int theValue) {
   saveTXT();
 }
 
+void saveImage(int theValue) {
+  String outputFilename = outputFilenameBase+"_"+year()+""+nf(month(),2)+""+nf(day(),2)+ "_"+nf(hour(),2)+""+nf(minute(),2)+""+nf(second(),2);
+  savePicture(outputFilename);
+}
 
 void buttonChooseImage(int theValue) {
   selectInput("Select a file to process:", "fileSelected");
@@ -380,7 +392,7 @@ void fileSelected(File selection) {
           int i2 = tempFilename.lastIndexOf(".");
           outputFilenameBase = tempFilename.substring(i1+1, i2);
         }
-        outputFilenameBase = outputFilenameBase+"CSP";
+        outputFilenameBase = outputFilenameBase+"HTPAL";
         //println("testing stripping the extension:",outputFilenameBase);
         pathOK = true;
         break;

@@ -53,7 +53,7 @@ int patternChoice = 1;
 int nIterationsOptimizationSwap = 20000;
 String imageFilename = "rhino.jpg";
 // initial base filename for outputs.
-String outputFilenameBase = "rhinoCSP";
+String outputFilenameBase = "rhinoHTPAL";
 boolean needToRedraw;
 boolean showAirTime = false; // whether or not to draw the toolpath when raised
 float roundingDistance = 0.001; // to check if points are coincident.
