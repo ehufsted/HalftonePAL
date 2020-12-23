@@ -429,6 +429,6 @@ void drawGUIBackground() {
   text("TOTAL POINTS: " + points.length, 370, height-34);
 
   textAlign(RIGHT);
-  text("CircleStackPack 1.0", width-10, height-30); 
+  text("HalftonePAL 1.0", width-10, height-30); 
   text("www.EstebanHufstedler.com", width-10, height-10);
 }
