@@ -42,8 +42,8 @@ color strokeColor = 0;
 color fillColor = 0;
 color backgroundColor = 255;
 color imagelessColor = color(128,128,255);
-color airTimeColor = color(255,0,0);
-float airTimeWidth = 1;
+color airTimeColor = color(255,120,0);
+float airTimeWidth = 2;
 
 
 int pointsChoice = 0;

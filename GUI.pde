@@ -76,7 +76,7 @@ void setupGUI() {
     .setPosition(xParams, y0+120)
     .setSize(100, 20)
     .setValue(rMaxScale+0)
-    .setRange(2, 50)
+    .setRange(2, 20)
     .setCaptionLabel("Max radius")
     .setBroadcast(true)
     ;
@@ -110,6 +110,7 @@ void setupGUI() {
     .addItem("Circles", 1)
     .addItem("Tilted lines", 2)
     .addItem("Scanning path", 3)
+    .addItem("Hilbert path", 4)
     .addItem("Greedy path", 5)
     .addItem("Greedy loop", 6)
     .addItem("Min Tree", 7)
