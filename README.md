@@ -92,3 +92,28 @@ Step by step:
 <img src="https://i.imgur.com/Cz7k5Ai.png" alt="better path" width="300">
 
 That's much better. Now I'll save it as an SVG, ready to plot elsewhere.
+
+# List of Point Styles
+- Circle Pack: Performs approximate circle packing, working from the top to bottom.
+- Circles (less dense): A less tight circle packing, since it uses random seed positions.
+- Random dither: Randomly places points if the probability of adding is higher than the image's local darkness.
+- Quadtree: Subdivide the image until each section has only enough darkness for one dot.
+- Grid 1D dither: On a square grid, do 1D error diffusion.
+- Grid 2D dither: On a square grid, do 2D error diffusion.
+- Grid random dither: On a square grid, do random dithering
+- Hex 1D dither: On a hexagonal grid, do 1D error diffusion.
+- Hex 2D dither: On a hexagonal grid, do 2D error diffusion.
+- Hex random dither: On a hexagonal grid, do random dithering
+
+# List of Pattern Styles
+- Dots: Draw the dot at the center of each circle.
+- Circles: Draw the circles associated with each point.
+- Tilted lines: For each point, it draws a single line, oriented to the local gradients.
+- Scanning path: Scans back and forth on the image, adding points along the way.
+- Hilbert path: Creates a Hilbert curve in the background, and places points in order of their position on that curve.
+- Greedy path: Create a one-way path through all the points. At each step, it chooses the nearest unused point.
+- Greedy loop: Create a loop through all the points. It sorts the points by greedy insertion: adding a point where it adds the least length to the loop.
+- Min tree: Connect the points to make the minimum spanning tree.
+- Voronoi: Draw the Voronoi diagram
+- Delaunay: Draw a Delaunay triangulation
+- Nearest pts: For each point, draw lines to the nearest 3 others.
