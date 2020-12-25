@@ -72,8 +72,8 @@ Pattern outputPattern; // store the halftoning pattern
 PImage pic; // store the loaded image.
 
 void setup() {
-  randomSeed(10);
   size(770, 800);
+  //randomSeed(10);
   ellipseMode(RADIUS);
   strokeJoin(ROUND);
   
@@ -149,6 +149,12 @@ void prepareForNewRun(){
 
 void loadAndPrepareImage() {
   pic = loadImage(imageFilename);
+  println(pic);
+  if(pic == null){
+    println("file does NOT exist");
+    generateDefaultImage();
+  }
+  
   nx = ceil(nxScale*2*rMin);
   ny = round(pic.height*nx*1.0/pic.width);
   println("Image size:",nx,ny);
@@ -161,4 +167,26 @@ void loadAndPrepareImage() {
   drawingScale = min(1.0*width/(nx),1.0*(height-guiBarHeight)/(ny));
   drawingX0 = (width-drawingScale*nx)/2;
   drawingY0 = (height-drawingScale*ny-guiBarHeight)/2;
+}
+
+void generateDefaultImage(){
+  int nx0= 100;
+  int ny0 = 100;
+  pic = createImage(100,100,RGB);
+  outputFilenameBase = "defaultHTPAL";
+  pic.loadPixels();
+  float x = 0;
+  float y = 0;
+  float b = 0;
+  for(int i=0; i<ny0; i++){
+    //y = map(i,0,ny0-1,-1,1);
+    y = (ny0-i)*1.0/nx0;
+    for(int j=0; j<nx0; j++){
+      //x = map(j,0,nx0-1,0.0,1);
+      x = j*1.0/nx0-0.5;
+      b= (sin(sqrt(x*x+y*y)*TWO_PI*2)/2+0.5);
+      b = pow(b,0.1)*255;
+      pic.pixels[i*nx0+j] = color(b);
+    }
+  }
 }
