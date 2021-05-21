@@ -5,10 +5,14 @@ Code for saving the output
 - savePicture
 */
 
+String makeOutputFilename(){
+  return outputFolder+ java.io.File.separatorChar +outputFilenameBase+"_"+year()+""+nf(month(),2)+""+nf(day(),2)+ "_"+nf(hour(),2)+""+nf(minute(),2)+""+nf(second(),2);
+}
+
 import processing.svg.*;
 void saveSVG(){
   println("saving SVG...");
-  String outputFilename = outputFilenameBase+"_"+year()+""+nf(month(),2)+""+nf(day(),2)+ "_"+nf(hour(),2)+""+nf(minute(),2)+""+nf(second(),2);
+  String outputFilename = makeOutputFilename();
   PGraphics svg = createGraphics(nx, ny, SVG, outputFilename+".svg");
   svg.ellipseMode(RADIUS);
   svg.beginDraw();
@@ -25,7 +29,7 @@ void saveSVG(){
   //// save a jpg as well.
   savePicture(outputFilename);
   
-  println("saved to SVG!");
+  println("saved to SVG! ", outputFilename);
 }
 
 void saveTXT(){
@@ -42,19 +46,24 @@ void saveTXT(){
   }
   tempStrings = stringList.toArray(new String[0]);
 
-  String outputFilename = outputFilenameBase+"_"+year()+""+nf(month(),2)+""+nf(day(),2)+ "_"+nf(hour(),2)+""+nf(minute(),2)+""+nf(second(),2);
+  String outputFilename = makeOutputFilename();
   saveStrings(outputFilename+".txt", tempStrings);
   
   // save a jpg as well.
   savePicture(outputFilename);
   
-  println("Saved TXT file!");
+  println("Saved TXT file! ", outputFilename);
 }
 
-void savePicture(String filenameBase){
-  float sc = drawingScale;
-  float x0 = drawingX0;
-  float y0 = drawingY0;
-  PImage imageOutput = get(ceil(x0)+1,ceil(y0)+1,floor(nx*sc)-1,floor(ny*sc)-1);
-  imageOutput.save(filenameBase+".png");
+void savePicture(String outputFilename){
+  // render a high-resolution output
+  int patternHeight = max(defaultPatternHeight,pic.height);
+  int patternWidth = round(patternHeight * 1.0*pic.width/pic.height);
+  generatePatternGraphics(patternWidth, patternHeight);
+  outputPattern.draw();
+  drawnPattern.save(outputFilename+".png");
+  println("Saved image file! ", outputFilename);
+  // go back to the standard size
+  generatePatternGraphics();
+  needToRedraw = true;
 }

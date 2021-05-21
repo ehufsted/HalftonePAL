@@ -6,7 +6,6 @@ Libraries:
 - controlP5
 - mesh: https://leebyron.com/mesh/
 
-
 Functions:
 - setup
 - draw
@@ -37,7 +36,7 @@ float nxScale = 100; // Detail level: can fit nxScale*2*rmin circles across the 
 boolean continueOptimizing = false;
 
 // for the appearance of the plots, GUI.
-int guiBarHeight = 200;
+int guiBarHeight = 176;
 color strokeColor = 0;
 color fillColor = 0;
 color backgroundColor = 255;
@@ -51,6 +50,8 @@ int patternChoice = 1;
 
 // Parameters that aren't immediately controllable.
 int nIterationsOptimizationSwap = 20000;
+int defaultPatternHeight = 600;
+String outputFolder = "";
 String imageFilename = "rhino.jpg";
 // initial base filename for outputs.
 String outputFilenameBase = "rhinoHTPAL";
@@ -59,20 +60,19 @@ boolean showAirTime = false; // whether or not to draw the toolpath when raised
 float roundingDistance = 0.001; // to check if points are coincident.
 float rMin = 3; // in pixels, used for computing packings.
 float rMax;
-int nx,ny;
-// needed for rendering the dots, lines
-float drawingScale = 1;
-float drawingX0 = 0;
-float drawingY0 = 0;
+int nx=1,ny=1;
 boolean useAreaScaling = true; //not actually useful. change the white balance of the image, if you'd prefer.
 
 
 Circle[] points; // store the points
 Pattern outputPattern; // store the halftoning pattern 
 PImage pic; // store the loaded image.
+PGraphics drawnPattern;
 
 void setup() {
-  size(770, 800);
+  size(700, 700);
+  surface.setResizable(true);
+  println("REMOVE drawingX0, etc. make into functions");
   //randomSeed(10);
   ellipseMode(RADIUS);
   strokeJoin(ROUND);
@@ -85,7 +85,6 @@ void setup() {
 
 
 void draw() {
-  
   drawGUIBackground(); // since the GUI is drawn every time.
   
   // optimize as needed
@@ -93,19 +92,24 @@ void draw() {
     outputPattern.optimize();
   }
   
+  // rescale to draw the dots, circles, image, whatever.
+  float[] drawingInfo = findDrawingPositionAndScales();
+  float drawingScalePic = drawingInfo[0];
+  float drawingScalePattern = drawingInfo[1];
+  float drawingX0 = drawingInfo[2];
+  float drawingY0 = drawingInfo[3];
+    
   // only redraw the pattern when necessary
   if (needToRedraw){
     fill(imagelessColor);
     noStroke();
-    rect(0,0,width,height-guiBarHeight);
+    rect(0,guiBarHeight,width,height);
     
-    // rescale to draw the dots, circles, image, whatever.
-    pushMatrix();
-    translate(drawingX0,drawingY0);
-    scale(drawingScale);
-    noStroke();
-    fill(backgroundColor);
-    rect(0,0,nx,ny);
+    drawnPattern.beginDraw();
+    drawnPattern.noStroke();
+    drawnPattern.fill(backgroundColor);
+    drawnPattern.rect(0,0,drawnPattern.width,drawnPattern.height);
+    drawnPattern.endDraw();
     
     println("drawing pattern");
     outputPattern.draw();
@@ -113,10 +117,20 @@ void draw() {
       outputPattern.drawAirTime();
     }
     
-    popMatrix();
     ((Toggle)(cp5.get("toggleShowImage"))).setValue(false);
     needToRedraw = false;
   }
+  pushMatrix();
+  translate(drawingX0,drawingY0);
+  if( ((Toggle)(cp5.get("toggleShowImage"))).getState() ){
+    scale(drawingScalePic);
+    image(pic,0,0);
+  }
+  else{
+    scale(drawingScalePattern);
+    image(drawnPattern,0,0);
+  }
+  popMatrix();
 }
 
 
@@ -136,12 +150,12 @@ void prepareForNewRun(){
   rMax = rMin*rMaxScale;
   
   loadAndPrepareImage();
-  
   generatePoints();
   generatePattern();
   needToRedraw = true;
   continueOptimizing = false;
   ((Toggle)(cp5.get("toggleContinueOptimizing"))).setValue(false);
+
 }
 
 
@@ -162,15 +176,29 @@ void loadAndPrepareImage() {
   pic.filter(GRAY);
   pic.filter(BLUR,rMin/2);
   pic.loadPixels();
+  
+  generatePatternGraphics();
+}
 
-  // for drawing on screen
-  drawingScale = min(1.0*width/(nx),1.0*(height-guiBarHeight)/(ny));
-  drawingX0 = (width-drawingScale*nx)/2;
-  drawingY0 = (height-drawingScale*ny-guiBarHeight)/2;
+void generatePatternGraphics(){
+  //int patternHeight = max(minPatternHeight,pic.height);
+  int patternHeight = defaultPatternHeight;
+  int patternWidth = round(patternHeight * 1.0*pic.width/pic.height);
+  generatePatternGraphics(patternWidth, patternHeight);
+}
+
+void generatePatternGraphics(int patternWidth, int patternHeight){
+  drawnPattern = createGraphics(patternWidth, patternHeight);
+  drawnPattern.beginDraw();
+  drawnPattern.ellipseMode(RADIUS);
+  drawnPattern.strokeJoin(ROUND);
+  drawnPattern.background(backgroundColor);
+  drawnPattern.endDraw();
+  println("Pattern size: ", drawnPattern.width, drawnPattern.height);
 }
 
 void generateDefaultImage(){
-  int nx0= 100;
+  int nx0 = 100;
   int ny0 = 100;
   pic = createImage(100,100,RGB);
   outputFilenameBase = "defaultHTPAL";
@@ -189,4 +217,12 @@ void generateDefaultImage(){
       pic.pixels[i*nx0+j] = color(b);
     }
   }
+}
+
+float[] findDrawingPositionAndScales(){
+  float drawingScalePic = min(1.0*width/(nx),1.0*(height-guiBarHeight)/(ny));
+  float drawingScalePattern = min(1.0*width/(drawnPattern.width),1.0*(height-guiBarHeight)/(drawnPattern.height));
+  float drawingX0 = (width-drawingScalePic*nx)/2.0;
+  float drawingY0 = guiBarHeight+(height-drawingScalePic*ny-guiBarHeight)/2;
+  return new float[]{drawingScalePic,drawingScalePattern,drawingX0,drawingY0};
 }

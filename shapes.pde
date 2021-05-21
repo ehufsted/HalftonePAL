@@ -56,21 +56,21 @@ class Circle extends HTShape{
     float rDrawMax = rDrawMaxCutoffScale*rMax;
     if(r<=rDrawMax){
       if(actLikePoint){
-        fill(fillColor);
-        noStroke();
-        ellipse(x,y,rMin*wLineScale,rMin*wLineScale);
+        drawnPattern.fill(fillColor);
+        drawnPattern.noStroke();
+        drawnPattern.ellipse(x,y,rMin*wLineScale,rMin*wLineScale);
       }
       else{
         if (filled){
-          fill(fillColor);
-          noStroke();
+          drawnPattern.fill(fillColor);
+          drawnPattern.noStroke();
         }
         else{
-          strokeWeight(rMin*wLineScale);
-          stroke(strokeColor);
-          noFill();
+          drawnPattern.strokeWeight(rMin*wLineScale);
+          drawnPattern.stroke(strokeColor);
+          drawnPattern.noFill();
         }
-        ellipse(x,y,r,r);
+        drawnPattern.ellipse(x,y,r,r);
       }
     }
   }
@@ -78,16 +78,22 @@ class Circle extends HTShape{
   void drawToSVG(PGraphics svg){
     float rDrawMax = rDrawMaxCutoffScale*rMax;
     if(r<=rDrawMax){
-      if (filled){
-        svg.fill(fillColor);
-        svg.noStroke();
+      if (actLikePoint) { // draw a point
+        svg.strokeWeight(rMin*wLineScale*2);
+        svg.point(x,y);
       }
       else{
-        svg.strokeWeight(rMin*wLineScale);
-        svg.stroke(strokeColor);
-        svg.noFill();
+        if (filled){
+          svg.fill(fillColor);
+          svg.noStroke();
+        }
+        else{
+          svg.strokeWeight(rMin*wLineScale);
+          svg.stroke(strokeColor);
+          svg.noFill();
+        }
+        svg.ellipse(x,y,r,r);
       }
-      svg.ellipse(x,y,r,r);
     }
   }
   
@@ -100,9 +106,9 @@ class Circle extends HTShape{
   }
   
   void drawCenter(){
-    fill(fillColor);
-    noStroke();
-    ellipse(x,y,1.5,1.5);
+    drawnPattern.fill(fillColor);
+    drawnPattern.noStroke();
+    drawnPattern.ellipse(x,y,1.5,1.5);
   }
   
   float[] drawAirTime(){
@@ -175,20 +181,20 @@ class PolyLine extends HTShape{
   
   void drawToSVG(PGraphics svg){
     findSegsToDraw();
-    stroke(fillColor);
-    strokeWeight(rMin*wLineScale);
-    noFill();
+    svg.stroke(fillColor);
+    svg.strokeWeight(rMin*wLineScale);
+    svg.noFill();
     for(float[] lineSeg : segsToDraw){
       svg.line(lineSeg[0],lineSeg[1],lineSeg[2],lineSeg[3]);
     }
   }
   void draw(){
     findSegsToDraw();
-    stroke(fillColor);
-    strokeWeight(rMin*wLineScale);
-    noFill();
+    drawnPattern.stroke(fillColor);
+    drawnPattern.strokeWeight(rMin*wLineScale);
+    drawnPattern.noFill();
     for(float[] lineSeg : segsToDraw){
-      line(lineSeg[0],lineSeg[1],lineSeg[2],lineSeg[3]);
+      drawnPattern.line(lineSeg[0],lineSeg[1],lineSeg[2],lineSeg[3]);
     }
   }
   
@@ -280,9 +286,10 @@ class PolyLine extends HTShape{
   float[] drawAirTime(){
     findSegsToDraw();
     if(segsToDraw.size()>0){
-      noFill();
-      stroke(airTimeColor);
-      strokeWeight(airTimeWidth);
+      //drawnPattern.beginDraw();
+      drawnPattern.noFill();
+      drawnPattern.stroke(airTimeColor);
+      drawnPattern.strokeWeight(airTimeWidth);
       float x1,y1,x2,y2;
       for(int i=0; i<segsToDraw.size()-1; i++){
         x1 = segsToDraw.get(i)[2];
@@ -290,9 +297,11 @@ class PolyLine extends HTShape{
         x2 = segsToDraw.get(i+1)[0];
         y2 = segsToDraw.get(i+1)[1];
         if((abs(x2-x1)+abs(y2-y1))>roundingDistance){
-          line(x1,y1,x2,y2);
+          drawnPattern.line(x1,y1,x2,y2);
+          drawnPattern.ellipse(x1,y1,5,5);
         }
       }
+      //drawnPattern.endDraw();
       return(new float[]{segsToDraw.get(0)[0]+0,segsToDraw.get(0)[1]+0,
                          segsToDraw.get(segsToDraw.size()-1)[2]+0,segsToDraw.get(segsToDraw.size()-1)[3]+0});
     }

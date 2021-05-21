@@ -19,20 +19,16 @@ There are four sections ot the UI:
 PFont pfont;
 ControlFont  cfont;
 void setupGUI() {
-  float y0 = height-guiBarHeight;
-
+  float y0 = 0;
   float xLoadSave = 10;
   float xParams = 140;
-  float xAppear = width-200;
-  float xOptimize = 370;
-
+  float xOptimize = 320;
+  float xAppear = 490;
 
   cp5 = new ControlP5(this);
   pfont = createFont("verdana", 12);
   cp5.setFont(pfont);
 
-
-  
   // LOAD/SAVE
   cp5.addButton("buttonChooseImage")
     .setBroadcast(false)
@@ -66,6 +62,14 @@ void setupGUI() {
     .setCaptionLabel("Save Image")
     .setBroadcast(true)
     ;
+  cp5.addButton("buttonOutputFolder")
+    .setBroadcast(false)
+    .setValue(0)
+    .setPosition(xLoadSave, y0+150)
+    .setSize(100, 20)
+    .setCaptionLabel("Output Folder")
+    .setBroadcast(true)
+    ;
   
 
   // RE-RUNS IF CHANGED
@@ -78,11 +82,10 @@ void setupGUI() {
     .setCaptionLabel("Use Black ink?")
     .setBroadcast(true)
     ;
-  ((Toggle)(cp5.get("toggleInvertColors"))).getCaptionLabel().setPadding(28, -17);
   cp5.addSlider("rMaxScale")
     .setBroadcast(false)
     .setPosition(xParams, y0+120)
-    .setSize(100, 20)
+    .setSize(70, 20)
     .setValue(rMaxScale+0)
     .setRange(2, 20)
     .setCaptionLabel("Max radius")
@@ -91,26 +94,17 @@ void setupGUI() {
   cp5.addSlider("nxScaleSlider")
     .setBroadcast(false)
     .setPosition(xParams, y0+150)
-    .setSize(100, 20)
+    .setSize(70, 20)
     .setValue(nxScale+0)
     .setRange(10, 400)
     .setCaptionLabel("Detail level")
     .setBroadcast(true)
     ;   
-  //cp5.addToggle("toggleAreaScaling")
-  //   .setBroadcast(false)
-  //   .setPosition(xParams,y0+180)
-  //   .setSize(50,20)
-  //   .setValue(true)
-  //   .setMode(ControlP5.SWITCH)
-  //   .setCaptionLabel("scale by area/length")
-  //   .setBroadcast(true);
-  //   ;
-  //((Toggle)(cp5.get("toggleAreaScaling"))).getCaptionLabel().setPadding(58,-17);
+  ((Toggle)(cp5.get("toggleInvertColors"))).getCaptionLabel().setPadding(28, -17);
   cp5.addDropdownList("dropdownPattern")
     .setBroadcast(false)
     .setPosition(xParams, y0+90)
-    .setSize(200, 100)
+    .setSize(150, 100)
     .setCaptionLabel("Pattern style")
     .setItemHeight(20)
     .setBarHeight(20)
@@ -132,7 +126,7 @@ void setupGUI() {
   cp5.addDropdownList("dropdownPoints")
     .setBroadcast(false)
     .setPosition(xParams, y0+60)
-    .setSize(200, 100)
+    .setSize(150, 100)
     .setCaptionLabel("Point style")
     .setItemHeight(20)
     .setBarHeight(20)
@@ -150,6 +144,17 @@ void setupGUI() {
     .setBackgroundColor(color(60))
     .setBroadcast(true)
     ;
+  //cp5.addToggle("toggleAreaScaling")
+  //   .setBroadcast(false)
+  //   .setPosition(xParams,y0+180)
+  //   .setSize(50,20)
+  //   .setValue(true)
+  //   .setMode(ControlP5.SWITCH)
+  //   .setCaptionLabel("scale by area/length")
+  //   .setBroadcast(true);
+  //   ;
+  //((Toggle)(cp5.get("toggleAreaScaling"))).getCaptionLabel().setPadding(58,-17);
+  
 
 
 
@@ -247,18 +252,47 @@ void toggleInvertColors(boolean theFlag) {
 //}
 
 void toggleShowImage(boolean theFlag) {
-  if (theFlag==true) {
-    println("showing image");
-    pushMatrix();
-    translate(drawingX0, drawingY0);
-    scale(drawingScale);
-    image(pic, 0, 0);
-    popMatrix();
-  } else {
-    needToRedraw = true;
-  }
+  //if (theFlag==true) {
+  //  println("showing image");
+  //  float[] drawingInfo = findDrawingPositionAndScales();
+  //  float drawingScale = drawingInfo[0];
+  //  float drawingX0 = drawingInfo[1];
+  //  float drawingY0 = drawingInfo[2];
+  //  pushMatrix();
+  //  translate(drawingX0, drawingY0);
+  //  scale(drawingScale);
+  //  image(pic, 0, 0);
+  //  popMatrix();
+  //} else {
+  //  needToRedraw = true;
+  //}
 }
 
+
+void drawGUIBackground(){
+  float y0 = 0;
+  float xLoadSave = 10;
+  float xParams = 140;
+  float xOptimize = 320;
+  float xAppear = 490;
+
+  
+  // draw the background, text
+  noStroke();
+  fill(80);
+  rect(0, y0, width, y0+guiBarHeight);
+  fill(255);
+  textAlign(LEFT);
+  text("LOAD/SAVE",xLoadSave, y0+20);
+  text("RE-RUNS IF CHANGED", xParams, y0+20);
+  text("OPTIMIZATION", xOptimize, y0+20);
+  text("APPEARANCE", xAppear, y0+20);
+
+  text("TOTAL POINTS: " + points.length, xOptimize, y0+guiBarHeight-10);
+  textAlign(RIGHT);
+  text("HalftonePAL 1.4", width-10, y0+guiBarHeight-30); 
+  text("www.EstebanHufstedler.com", width-10, y0+guiBarHeight-10);
+}
 
 
 
@@ -357,16 +391,14 @@ void saveAsTXT(int theValue) {
   saveTXT();
 }
 
-void saveImage(int theValue) {
-  String outputFilename = outputFilenameBase+"_"+year()+""+nf(month(),2)+""+nf(day(),2)+ "_"+nf(hour(),2)+""+nf(minute(),2)+""+nf(second(),2);
+void saveImage() {
+  String outputFilename = makeOutputFilename();
   savePicture(outputFilename);
 }
 
 void buttonChooseImage(int theValue) {
-  selectInput("Select a file to process:", "fileSelected");
+  selectInput("Select an image to process:", "fileSelected");
 }
-
-
 
 void fileSelected(File selection) {
   if (selection == null) {
@@ -408,27 +440,21 @@ void fileSelected(File selection) {
 }
 
 
+void buttonOutputFolder(int theValue) {
+  selectFolder("Select a folder to process:", "folderSelected");
+}
+void folderSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    outputFolder = selection.getAbsolutePath();
+    println(outputFolder);
+  }
+}
+
 void mousePressed() {
   if (mouseX>=width-180 && mouseX<=width-5 && mouseY>=height-25 && mouseY<=height-3) { 
     link("www.EstebanHufstedler.com");
   }
-}
-
-void drawGUIBackground() {
-  noStroke();
-  fill(80);
-  rect(0, height-guiBarHeight, width, height);
-  fill(255);
-  textAlign(LEFT);
-  text("LOAD/SAVE", 10, height-guiBarHeight+20);
-  text("RE-RUNS IF CHANGED", 140, height-guiBarHeight+20);
-  text("OPTIMIZATION", 370, height-guiBarHeight+20);
-  text("APPEARANCE", width-200, height-guiBarHeight+20);
-
-
-  text("TOTAL POINTS: " + points.length, 370, height-34);
-
-  textAlign(RIGHT);
-  text("HalftonePAL 1.0", width-10, height-30); 
-  text("www.EstebanHufstedler.com", width-10, height-10);
 }

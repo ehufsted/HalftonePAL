@@ -82,8 +82,13 @@ class Pattern{
   }
   
   void draw(){
+    drawnPattern.beginDraw();
+    drawnPattern.pushMatrix();
+    drawnPattern.scale(drawnPattern.width*1.0/pic.width);
     for(int i=0; i<shapes.length;i++)
       shapes[i].draw();
+    drawnPattern.popMatrix();
+    drawnPattern.endDraw();
   }
   
   void drawToSVG(PGraphics svg){
@@ -94,25 +99,28 @@ class Pattern{
   void drawAirTime(){
     float x1=-1,y1=0,x2,y2;
     float[] startAndFinish;
+    drawnPattern.beginDraw();
+    drawnPattern.noFill();
+    drawnPattern.stroke(airTimeColor);
+    drawnPattern.strokeWeight(airTimeWidth);
+    drawnPattern.pushMatrix();
+    drawnPattern.scale(drawnPattern.width*1.0/pic.width);
+    
     for(int i=0; i<shapes.length; i++){
       // this also gets its first and last points
       startAndFinish = shapes[i].drawAirTime();
       if(startAndFinish.length>0){
         x2 = startAndFinish[0]+0;
         y2 = startAndFinish[1]+0;
-        if(x1!=-1){
-          noFill();
-          stroke(airTimeColor);
-          strokeWeight(airTimeWidth);
-          if((abs(x2-x1)+abs(y2-y1))>roundingDistance){
-            line(x1,y1,x2,y2);
-          }
+        if(i>0 && (abs(x2-x1)+abs(y2-y1))>roundingDistance){
+            drawnPattern.line(x1,y1,x2,y2);
         }
         x1 = startAndFinish[2]+0;
         y1 = startAndFinish[3]+0;
       }
     }
-    
+    drawnPattern.popMatrix();
+    drawnPattern.endDraw();
   }
   
   void optimize(){
@@ -1012,3 +1020,77 @@ void patternHilbertSort(float cellWidth){
   
   println("Sorted hilbert-wise");
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Scribble: not currently good.
+
+//void patternScribble(){
+//  ArrayList<PolyLine> lineSegs = new ArrayList<PolyLine>(points.length); // indices of nearest neighbors
+//  float[] xs,ys;
+  
+//  float t,x,y,r,k,L,r1,r2,segLength,x1,x2,y1,y2;
+//  float ds0 = 0.5;
+//  float s=0,p=0,k1,k2,ks,rs,a;
+//  float H;
+//  float w = rMin*wLineScale;
+//  int n;
+//  float xp, yp, dpds,ds;
+//  for(int i=0; i<points.length-1; i++){
+    
+//    x1 = points[i].x;
+//    y1 = points[i].y;
+//    r1 = points[i].r;
+//    k1 = points[i].k;
+//    x2 = points[i+1].x;
+//    y2 = points[i+1].y;
+//    r2 = points[i+1].r;
+//    k2 = points[i+1].k;
+//    t = atan2(y2-y1,x2-x1);
+    
+//    segLength = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+//    n = ceil(segLength/ds0)+1;
+//    ds = segLength/(n-1);
+//    xs = new float[n];
+//    ys = new float[n];
+//    for(int j=0; j<n; j++){
+//      s = map(j,0,n,0,segLength);
+//      r = map(j,0,n,r1,r2);
+//      k = map(j,0,n,k1,k2);
+//      r = rMin;
+//      //k = 0.5;
+//      H = r*2;
+//      ks = k*(1-w/H)+w/H;
+//      //ks = k;
+//      a = 1+ks*(H/w-1);
+//      a = constrain(a,1.001,10000);
+      
+//      //rs = r*(1-k); // scribble radius
+//      rs = H/2;
+//      L = TWO_PI*rs/sqrt(a*a-1);
+//      //dpds = 1/(0.1+k); 
+//      dpds = TWO_PI/L;
+//      p += dpds * ds;
+//      xp = s+rs*cos(p);
+//      yp =   rs*sin(p);
+//      //yp = sin(p)*sqrt(r*r-pow(s-r,2));
+//      xs[j] = x1+xp*cos(t)-yp*sin(t);
+//      ys[j] = y1+xp*sin(t)+yp*cos(t);
+//    }
+
+//    lineSegs.add(new PolyLine(xs.clone(),ys.clone()));
+    
+//    //xs = new float[2];
+//    //ys = new float[2];
+//    //xs[0] = x1;
+//    //xs[1] = x2;
+//    //ys[0] = y1;
+//    //ys[1] = y2;
+//    //lineSegs.add(new PolyLine(xs.clone(),ys.clone()));
+//  }
+
+//  PolyLine[] lineSegsTemp = new PolyLine[1];
+//  //lineSegs2 = lineSegs.toArray(lineSegs2);
+//  outputPattern = new Pattern(lineSegs.toArray(lineSegsTemp));
+  
+//  println("Pattern: Scribble");
+//}
