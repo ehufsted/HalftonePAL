@@ -29,7 +29,7 @@ New in v1.4:
 <img src="https://i.imgur.com/wzvi5Np.png" alt="Screenshot on opening" width="500">
 
 
-The top portion of the program shows the current result. When it starts, it automatically loads the rhino.jpg image, calculates a quick circle packing, and draws the circles on a white background. 
+The lower portion of the program shows the current result. When it starts, it automatically loads the rhino.jpg image (or generates a filler image), calculates a quick circle packing, and draws the circles on a white background. 
 
 
 The bottom portion is the control panel, with four columns. In the left column, you can load a new image and save the output as text, SVG, or JPG. The second column changes the properties of the points or pattern, and will re-calculate the result if they are changed. The third column deals with optimizing the path, which can greatly reduce the pen's travel time. The right column changes the appearance of the pattern. More detail below!
