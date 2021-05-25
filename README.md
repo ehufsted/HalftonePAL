@@ -16,7 +16,7 @@ This arranges points on an image for halftoning, using the circles themselves, d
 - Switch between black and white ink.
 - Can choose to omit the largest circles or line segments
 
-New in v1.4
+New in v1.4:
 - Program is resizeable
 - Can choose a folder for saving patterns
 - Dots are no longer rendered as circles
