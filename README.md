@@ -1,7 +1,7 @@
 # HalftonePAL
 Halftone with Points And Lines
 
-Copyright (C) 2020 by [Esteban Hufstedler](www.EstebanHufstedler.com ). Thanks to [StippleGen](https://wiki.evilmadscientist.com/StippleGen) for the inspiration, and [Lee Byron](https://leebyron.com/mesh/) for the mesh library.
+Copyright (C) 2021 by [Esteban Hufstedler](www.EstebanHufstedler.com ). Thanks to [StippleGen](https://wiki.evilmadscientist.com/StippleGen) for the inspiration, and [Lee Byron](https://leebyron.com/mesh/) for the mesh library.
 
 This arranges points on an image for halftoning, using the circles themselves, dots at their centers, or lines connecting the circles.
 
@@ -15,6 +15,12 @@ This arranges points on an image for halftoning, using the circles themselves, d
 - Save the circles or pattern as JPG, SVG, and TXT files.
 - Switch between black and white ink.
 - Can choose to omit the largest circles or line segments
+
+New in v1.4
+- Program is resizeable
+- Can choose a folder for saving patterns
+- Dots are no longer rendered as circles
+- Moved control bar to the top
 
 [**Download at itch.io.**](https://ehufsted.itch.io/HalftonePAL)
 
