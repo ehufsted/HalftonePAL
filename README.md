@@ -40,6 +40,7 @@ The bottom portion is the control panel, with four columns. In the left column, 
 - "SAVE SVG": Saves an SVG file of the current pattern. It also saves a PNG with the same base filename.
 The names of the saved files are based on the current time and date, so you shouldn't have to worry above over-writing your previous results.
 - "SAVE IMAGE": It saves a PNG of the current view.
+- "OUTPUT FOLDER": Choose where to save your images, SVGs, or text files.
 
 ## RE-RUNS IF CHANGED
 - "BLACK/WHITE INK": Switches between black ink on a white background, or white ink on a black background.
